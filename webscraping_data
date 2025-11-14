@@ -1,0 +1,58 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+def get_matches(year):
+    web= f'https://en.wikipedia.org/wiki/{year}_FIFA_World_Cup'
+    
+    # Cabeceras para simular un navegador
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/142.0.0.0 Safari/537.36"
+    }
+    
+    # Hacer la petición con headers
+    response = requests.get(web, headers=headers)
+    
+    # Verificar que la página se cargó correctamente
+    if response.status_code == 200:
+        print("Conexión exitosa!")
+        content = response.text
+        soup    = BeautifulSoup(content, 'lxml')
+        matches = soup.find_all('div', class_='footballbox')
+
+        # Listas
+        home = []
+        score= []
+        away = []
+        
+        for match in matches:
+            home.append(match.find('th', class_='fhome').get_text())
+            score.append(match.find('th', class_='fscore').get_text())
+            away.append(match.find('th', class_='faway').get_text())
+            
+        dict_football = {'home':home, 'score':score, 'away':away}
+        df_football = pd.DataFrame(dict_football)
+        df_football['year'] = year        
+    else:
+        print("Error:", response.status_code)
+
+    return df_football
+
+# Solo años validos
+years = list(range(1930, 2023, 4))
+years = [year for year in years if year not in [1942, 1946]]
+
+# Data Historica
+fifa = [get_matches(year) for year in years]
+# Evitar df's vacios(None)
+fifa = [df for df in fifa if df is not None]
+
+# Crear y Guardar 'df_fifa'
+df_fifa = pd.concat(fifa, ignore_index=True)
+df_fifa.to_csv('fifa_worldcup_historical_data.csv', index=False)
+
+# Fixture
+df_fixture = get_matches('2026')
+df_fixture.to_csv('fifa_worldcup_fixture.csv', index=False)
