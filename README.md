@@ -20,16 +20,24 @@ Este repositorio incluye:
 
 ## 2. Contenidos del Repositorio
 /
-├── webscraping_data.ipynb # Script de Web Scraping con BeautifulSoup
-├── prediction_2026_worldcup.ipynb # Modelo predictivo para el Mundial 2026 (Editando en Jupyter labs)
+├── prediction_2026_worldcup.ipynb # Modelo predictivo para el Mundial 2026 
+├── clean_csv_files-format_fixtures.ipynb # Limpieza y formateo de archivos csv  
 ├── data/
+│ ├── clean_fifa_worldcup_historical_data.csv
+│ ├── fifa_worldcup_fixture_2026.csv
 │ ├── fifa_worldcup_historical_data.csv
-│ └── fifa_worldcup_fixture_2026.csv
+│ ├── fifa_worldcup_missing_data.csv
+│ └── format_fixture_data.csv
+├── scrapping/
+│ ├── Web_Scrapping_bs4.ipynb
+│ └── Web_Scrapping_selenium.ipynb
 └── README.md
 
 ## 3. Web Scraping
 
-El archivo **`webscraping_data.ipynb`**:
+La carpeta 'scrapping' contiene:
+
+**`Web_Scrapping_bs4.ipynb`**:
 
 - Extrae resultados de cada partido por mundial  
 - Omite los años que no se jugaron (1942 y 1946)  
@@ -42,7 +50,27 @@ Tecnologías usadas:
 - `pandas`
 - `lxml`
 
-## 4. Predicción del Mundial 2026
+**`Web_Scrapping_selenium.ipynb`**:
+
+- Extrae resultados de cada partido de los Mundiales, incluyendo años faltantes.  
+- Omite los años que no se jugaron (1942 y 1946).  
+- Automatiza la navegación en Wikipedia con Selenium y selecciona elementos con XPath.  
+- Guarda los datos en un CSV listo para análisis posteriores.  
+
+Tecnologías usadas:
+- `selenium`
+- `pandas`
+- `time`
+- `chromedriver` / `Chrome WebDriver` 
+
+## 4. Limpieza de Dataset y Formateo
+
+En el archivo **`clean_csv_files-format_fixtures.ipynb`** se:  
+- Limpian y normalizan los datasets obtenidos de los Mundiales anteriores.  
+- Se formatea `df_fixture` para crear una versión preliminar del Mundial 2026.  
+- Permite trabajar con los datos aunque aún no se conozcan los 18 países restantes que clasificarán.
+
+## 5. Predicción del Mundial 2026
 
 En el archivo **`prediction_2026_worldcup.ipynb`** se:
 
